@@ -32,7 +32,23 @@ Now, navigate to the Home.razor file. It's path should be AiTutor/Components/Pag
 ```
 This will allow us to navigate, view, and access the page we created in the previous step, and view our message. Try it out!
 
-Step 5 - 
+Step 5 - Now, lets get into some of the more interesting & technical capabilities of ASP.NET and C#. Inside the OnBoarding.razor.cs, add the following code chunk.
+```csharp
+using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using AiTutor.Data;
+#pragma warning disable CA1848
+
+namespace AiTutor.Components.OnBoarding;
+
+public partial class OnBoardingComponent : ComponentBase
+{
+    [Inject] IDbContextFactory<ApplicationDbContext> DbContextFactory { get; set; } = default!;
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] public ILogger<OnBoardingComponent> Logger { get; set; } = default!;
+}
+```
+
 
 
 
