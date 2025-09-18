@@ -50,8 +50,52 @@ public partial class OnBoardingComponent : ComponentBase
 ```
 In ASP.NET, using other sections of code outside of your folder scope requires direct reference/requesting of the functionality. Doing this requires a using statement. Sets of code are organized into namespaces. Essentially just a way to reference where your code is without having to reference the direct file path. Namespaces can encapsulate multiple files. So, if you wanted to access code, classes, etc, from our OnBoarding tutorial, you'd have to include a using statement referencing its namespace. The other using statements that we have included are required for making sure we do not get errors with the rest of the code chunk. In the code chunk, we define a public partial class that inherits from the ComponentBase class, a class provided by ASP.NET that allows for communicaiton between the backend and frontend file. The partial keyword ensures we can extend the class in other areas of the code, if needed. Typically it isn't needed, but it is a convention we follow. The [Inject] keywords are what we call Dependency Injection. Dependency Injection is a coding concept that essentially takes work away from the code youa re currently working, by asking for what it needs, rather than creating it interally. The inject keyword is handeled by .NET, where it in the background handles the creation & assignment of the required service. The {get;set;} keywords define basic get and set methods for the object, making it into a property. This is useful in many cases, first, it allows for reference of the variable in the .razor file, which we will demonstrate later. Additionally, it allows you define more complex/protected get and set methods easily, without having to fully flesh out a method for it. The default keyword tells .NET to initialize the varible with its default value, typically null, but not always. Regardless, .NET may complain and throw a warning, saying that the variable may be null. By adding the ! signature, we tell .NET that it won't be null by the time we use it. Now, for the actual things we are injecting, DbContextFactory is a service we use to build connections to the databse, Navigation Manager is a ASP.NET provided service that lets us navigate to different pages, and the Logger allows us to Log information for debugging and other similar purposes.
 
+Next, go to the OnBoarding.razor file and remove the following: 
+```html
+<div>
+    <h1>Hello New Pedalogical Worker!</h1>
+</div>
+```
+Now, insert this code underneath the @page: 
+```html
+@inherits AiTutor.Components.OnBoarding.OnBoardingComponent
+```
+This connects the code from our .razor.cs file to our .razor file, allowing us to use the variables, methods, etc, within the backend file, in our frontend. 
 
+Step 6 - Now, lets expand on our new page. We will now explore using actual data and how logic involving it might actually look. Lets now navigate to the Models folder, its path is AiTutor/Data/Models. In the Models folder, create a new folder called OnBoarding. Next, create a file called Company.cs and another file called Worker.cs. In the Company.cs file, copy the following code:
+```csharp
+namespace AiTutor.Data.Models.OnBoarding;
 
+public class Company
+{
+    public int Id { get; set; }
+    public string CompanyName { get; set; } = "Willamette University";
+    public List<Worker> Workers { get; set; } = [];
+}
+```
+In the Worker.cs file, copy the following code: 
+```csharp
+namespace AiTutor.Data.Models.OnBoarding;
+
+public class Worker
+{
+    public int Id { get; set; }
+    public required int CompanyId { get; set; }
+    public Company? Company { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required Job Job { get; set; }
+}
+
+public enum Job
+{
+    ResearchAssistant,
+    AssistantProfessor,
+    TeachingAssistant,
+    AssociateProfessor
+    
+}
+```
 
 
 
