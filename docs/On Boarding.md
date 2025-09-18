@@ -18,7 +18,24 @@ Step 2 (Github Desktop & Command Line) - At this point, if everything was done c
 
 Step 3 - From this point, the instructions are majority agnostic to whether you are using Github Desktop or the Command Line. We will now begin working in the codebase. First, identify the *Components* folder within the project, it's path should be AiTutor/Components. Within this folder, create a new folder called OnBoarding. Next, create three files within the OnBoarding folder: OnBoarding.razor, OnBoarding.razor.cs, OnBoarding.razor.css. Once you have made these files, confirm everything with your project is working by running the command dotnet build. If the project builds, which it should, we are good to continue. 
 
-Step 4 - 
+Step 4 - Lets begin understanding how the ASP.NET framework works, namely how to go from code to viewable web pages. Inside your OnBoarding.razor file, add the following code.
+```html
+@page "/OnBoarding"
+
+<div>
+    <h1>Hello New Pedalogical Worker!</h1>
+</div>
+```
+Now, navigate to the Home.razor file. It's path should be AiTutor/Components/Pages/HomeFolder/Home.razor. Scroll down to the bottom of the page, and add the following code.
+```html
+<a class="btn btn-primary" href="/OnBoarding">On Boarding Page</a>
+```
+This will allow us to navigate, view, and access the page we created in the previous step, and view our message. Try it out!
+
+Step 5 - 
+
+
+
 
 
 
