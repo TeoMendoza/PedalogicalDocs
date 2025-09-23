@@ -98,10 +98,84 @@ public enum Job
 ```
 
 
-What we have defined here are two classes with a relationship. In english, you could say that a company has many workers, while a single worker only has one company. This relationship is intuitively understood by you, the human, but it's not as clear to the computer, it wants to know exactly what the relationship is, to be able to throw errors if something breaks that relationship
+What we have defined here are two classes with a relationship. In english, you could say that a company has many workers, while a single worker only has one company. This relationship is intuitively understood by you, the human, but it's not as clear to the computer, it wants to know exactly what the relationship is, to be able to throw errors if something breaks that relationship. This is why databases are called "relational". In this case, this is a One To Many Relationship. To define this, go to the ApplicationDbContext.cs file, it's path should be AiTutor/Data/ApplicationDbContext.cs. Add this code to the bottom, below all the existing code.
 
+```csharp
+public DbSet<Company> Companies => Set<Company>();
+public DbSet<Worker> Workers => Set<Worker>();
 
+modelBuilder.Entity<Company>().ToTable("Companies");
+modelBuilder.Entity<Worker>().ToTable("Workers");
 
+modelBuilder.Entity<Worker>()
+    .HasOne(w => w.Company)
+    .WithMany(c => c.Workers)
+    .HasForeignKey(w => w.CompanyId)
+    .OnDelete(DeleteBehavior.Cascade); 
+```
+What this code is doing is a couple important things. The DbSet allows us to work with the Worker and Company data inside our code in a special fashion using somethign called LINQ, which we will cover in later steps. The ToTable allows us to configure the table name of a class inside the database to something more intuitive. Lastly, the last section of code is how we define the One To Many relationship between Company and Worker. When defining a relationship like this, you always define it from the perspective of the dependent. In this case, the worker, because a company can have any amount of workers, it's agnostic to how many and who those workers are. However, a worker cannot exist without a company, so it is the dependent class. We strictly define that it can only have one Company, then we clarify that the same company can have other workers, defining the One to Many relationship. We then define the forgein key, which is the identifer that the Worker will have that links it to a specific company, this will allows us to grab all workers from a company easily. Lastly, we have an on delete behavior that tells the database to delete all workers under a specifc company when its deleted. This does not mean that if a worker is deleted, the comapny is deleted, it's only one direction.
+
+Now we are done defining the classes and relationships to be used in our code! The last thing we have to do is run a migration, we ensures our changes are reflected in the database. In your terminal, run the command <code>dotnet ef migrations add OnBoardingMigration</code> then run <code>dotnet ef database update</code>
+
+Step 7 - Now let's actually do some cool stuff with our new Worker and Company models. Let's go back to our OnBoarding.cs file we made a couple steps ago. Replace your current code with the following.
+```csharp
+using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using AiTutor.Data;
+using AiTutor.Data.Models.OnBoarding;
+#pragma warning disable CA1848
+
+namespace AiTutor.Components.OnBoarding;
+
+public partial class OnBoardingComponent : ComponentBase
+{
+    [Inject] IDbContextFactory<ApplicationDbContext> DbContextFactory { get; set; } = default!;
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] public ILogger<OnBoardingComponent> Logger { get; set; } = default!;
+    [SupplyParameterFromQuery] public string QueryMessage { get; set; } = default!;
+    protected Company? Company { get; set; }
+    protected List<Worker> Workers { get; set; } = [];
+    protected IReadOnlyList<Worker> ResearchAssistants => ShowResearchAssistants ? Workers.Where(w => w.Job == Job.ResearchAssistant).ToList() : Workers;
+    protected Worker NewWorker { get; set; } = default!;
+    protected bool ShowResearchAssistants { get; set; }
+    protected bool ShowNewWorkerForm { get; set; }
+}
+```
+In this, we have added a couple new things. Firstly, we have added a using statement at the top that allows us to access the Worker and Company models we made in the previous step. Additionally, we have added a query parameter. This is a value that we pass in through the url when navigating to our page, that we parse and store as a variable. It will not be particularly useful in this exercise, but it's good to know how to use it, as it is widely used for passing through Id's across pages throughout the project. Next, we define a Company variable, making it nullable. Next, we define a List of Workers that will be the Workers from our company. We also define another list of Workers that uses LINQ, which stands for language integrated query, a nicely defined set of commands that help us query our data, both in memory and from the database. In this LINQ, we use a Where command, which is a filter, with the parameter being our filter condition, in this case, it takes in the paramter w, which is a Worker, then we check whether the workers Job is equal to a Research Assistant. Then we turn that all into a List. We also define another Worker called NewWorker which will let us add new workers to our company. We also define some booleans that we will use for within the html. 
+
+Now, add this code to the bottom of the file (within the Class)
+
+```csharp
+protected override async Task OnInitializedAsync()
+    {
+        Logger.LogInformation("Hello new Pedalogical worker! QueryMessage = {QueryMessage}", QueryMessage);
+
+        using var DbContext = DbContextFactory.CreateDbContext();
+
+        Company = await DbContext.Companies.Include(c => c.Workers).FirstOrDefaultAsync();
+
+        if (Company is null)
+        {
+            Company = new();
+            DbContext.Companies.Add(Company);
+            await DbContext.SaveChangesAsync();
+
+            await AddCurrentStaff(DbContext, Company);
+
+            Company = await DbContext.Companies.Include(c => c.Workers).FirstAsync() ?? throw new InvalidOperationException("Company Must Exist");
+        }
+
+        Workers = Company.Workers;
+
+        NewWorker = new()
+        {
+            CompanyId = Company.Id,
+            FirstName = "Temporary First Name",
+            LastName = "Temporary Last Name",
+            Job = Job.AssistantProfessor
+        };
+    }
+```
 
 
 
