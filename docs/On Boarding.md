@@ -98,6 +98,8 @@ public enum Job
 ```
 
 
+What we have defined here are two classes with a relationship. In english, you could say that a company has many workers, while a single worker only has one company. This relationship is intuitively understood by you, the human, but it's not as clear to the computer, it wants to know exactly what the relationship is, to be able to throw errors if something breaks that relationship
+
 
 
 
