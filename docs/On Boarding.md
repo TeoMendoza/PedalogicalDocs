@@ -181,5 +181,236 @@ Before we talk about what's inside the function, it's important we talk about th
 
 Inside our OnInitialized function, we first Log our query message, this isn't relavent other than to show you that what you passed in through the url when navigating gets parsed and stored into the variable. Next, we begin working with the database. First, we establish a connection to the database using the DbContextFactory. This gets a current snapshot of the database and the data it has the current moment. Next, we ask the database to give us some information using our await keyword. All database operations should be asynchronous, that is a pattern that is standard and scalable. What we are requesting is to look at the Companies table and grab the first company it can find. If it can find the company, it returns null (this is the default part of the method signature). Additionally, from the first one, we use a .Include to also include the companies workers. This is not magic however, it doesn't just know which workers are in the company. It does this using the defined relationship from the previous step. The company has an Id value defined, a unique identifier and primary key. By giving each worker in the company this Id under the CompanyId field, the database can look through the workers table and grab all workers with the associated Company Id, this is why it is so powerful, we skip so much unecessary logic with a little bit of pre-measures. This can scaffold down into multiple sub includes, making it even more powerful in many cases! Next, because we haven't actually put any company into the database yet, the whole database call will return null. In this case, we want to insert a Company into the database. So we first check if Company is null and then instantiate a new one, add it to the Companies table, and then save our changes asynchronously once again. Then we call a function to add some current staff (which we will define soon, it will say it doesn't know what that func is which is fine for now). Once we have presumably added our staff, we reload our Company which should now exist in the database! We also make sure to catch it with an exception, to ensure that if anything went wrong we know, since after adding it to DB, there should be no reason why it doesn't load. Next we set our Workers variable to the Companies Workers, just so referencing them is easier. We also create a New Worker that has some filler data, so that when we hook it up to the front end, users can create a new worker that links to this variable. 
 
+Now, lets add the last bit of our backend code
+
+```csharp
+protected async Task AddWorkerToCompany(Worker Worker)
+    {
+        if (string.IsNullOrWhiteSpace(Worker.FirstName) || string.IsNullOrWhiteSpace(Worker.LastName))
+        {
+            Logger.LogWarning("Rejected add: worker must have first and last name.");
+            return;
+        }
+
+        using var DbContext = DbContextFactory.CreateDbContext();
+
+        DbContext.Workers.Add(Worker);
+        await DbContext.SaveChangesAsync();
+
+        Workers.Add(Worker);
+        StateHasChanged();
+
+        NewWorker = CreateBlankWorker(Company!.Id);
+        ShowNewWorkerForm = false;
+    }
+
+    private static async Task AddCurrentStaff(ApplicationDbContext DbContext, Company Company)
+    {
+        Worker Lucas = new()
+        {
+            CompanyId = Company.Id,
+            FirstName = "Lucas",
+            LastName = "Cordova",
+            Job = Job.AssistantProfessor
+        };
+
+        Worker Teo = new()
+        {
+            CompanyId = Company.Id,
+            FirstName = "Teo",
+            LastName = "Mendoza",
+            Job = Job.ResearchAssistant
+        };
+
+        Worker Ben = new()
+        {
+            CompanyId = Company.Id,
+            FirstName = "Ben",
+            LastName = "Webster",
+            Job = Job.ResearchAssistant
+        };
+
+        DbContext.Workers.AddRange(Lucas, Teo, Ben);
+        await DbContext.SaveChangesAsync();
+    }
+
+    protected void ToggleShowResearchAssistants()
+    {
+        ShowResearchAssistants = !ShowResearchAssistants;
+    }
+
+    private static Worker CreateBlankWorker(int CompanyId) => new()
+    {
+        CompanyId = CompanyId,
+        FirstName = "Temporary First Name",
+        LastName = "Temporary Last Name",
+        Job = Job.AssistantProfessor
+    };
+
+    protected void NavigateHome() => NavigationManager.NavigateTo("/");
+```
+
+Add this code within our class, underneath all our existing code. Now there's quite alot here, but you'll see alot of similarities and repeated chunks to some degree. Our first function, AddWorkerToCompany, takes in a parameter Worker, confirms that it has the data we are requiring, which is a First and Last Name, and if it does, we add that worker to the database, save our changes, and reinitialize our Worker to a blank worker. We also reset the ShowNewWorkerForm boolean, this will make sense when we go to the front end. We then have our AddCurrentStaff function which we called in OnInitialized, it initiliazes three workers that we have predefined, and then adds them all at once to the database and saves changes. Note: The add range function is a special form of an add that can add multiple things in one operation. It is preferred when you have to add multiple things to the same table, because instead of forming a new request and inserting for each worker, it forms one request and adds them all at once. We then have a ToggleShowResearchAssistants function, we just toggles our boolean variable, this will be used on the front end to allow the user to filter all the workers to only the research assistants if they would like. If you go back to our ResearchAssistants variable, you will see the ShowResearchAssistants boolean with a question mark and a colon. This is called a ternary operation. Think of it like so: If ShowResearchAssistants (this is asking whether its true, !ShowResearchAssistants would ask if false), then ResearchAssistants equal our filtered group with the where command. Otherwise, ResearchAsisstants equal our normal workers list. This is a simplified but powerful if else statement. You may ask why this isn't used more, a ternary operation MUST return a value, it cannot be used to call a function or anything of the sort, it has to be giving back something to work with. Our next function is just our simple create blank worker function, that takes in a company Id and returns a boiler plate worker. You may notice, in our OnInitialized function, we do this manually, but at this point, we can replace the manual code with our function if we would like! No need to, just so you see that we can make our code more organized if we would like, something we typically would reccomend as you develop more. Lastly, we have our Navigate Home Function. You may be asking what the => signature means, this is a signature that allows for a function to be simplified only if it will have one line. In this case, all we want is to navigate back to the home page, so we can use our => signature. Now, our backend code is done!
+
+Step 8 - Quick step, before we do our front end, lets just fill out our OnBoarding.css file. Css is just styling classes that we can use to make the thigns we show our users pretty. As a rule of the project, we have different levels of css attempting to have shared css at more general levels of the project so that we don't have to repeat css styles. However, it can be difficult to follow while in development, so it is something we are not 100% strict with, and try to do once the actual development is done. Add this to your .css file
+
+```css
+.onboarding {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.subtitle {
+  margin: .25rem 0 0 0;
+  color: #667085;
+  font-size: .95rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid #d0d5dd;
+  background: #fff;
+  color: #344054;
+  padding: .5rem .85rem;
+  border-radius: .6rem;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .03s ease;
+}
+.btn:hover { background: #f9fafb; border-color: #c7ced6; }
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: #1f6feb;
+  color: #fff;
+  border-color: #1f6feb;
+}
+.btn-primary:hover { background: #175bd0; border-color: #175bd0; }
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: #475467;
+}
+.btn-ghost:hover { background: #f3f4f6; border-color: #e5e7eb; }
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: .8rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  padding: .9rem 1rem .5rem 1rem;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.count {
+  font-size: .9rem;
+  color: #667085;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: .75rem 1rem;
+  border-bottom: 1px solid #eef2f6;
+  white-space: nowrap;
+}
+
+.table thead th {
+  color: #475467;
+  font-weight: 600;
+  background: #f8fafc;
+}
+
+.empty {
+  padding: 1rem;
+  color: #667085;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .9rem;
+  padding: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+
+.form-field label {
+  font-size: .9rem;
+  color: #475467;
+}
+
+.input {
+  border: 1px solid #d0d5dd;
+  border-radius: .6rem;
+  padding: .55rem .7rem;
+  font-size: .95rem;
+  background: #fff;
+  color: #111827;
+}
+.input:focus {
+  outline: none;
+  border-color: #1f6feb;
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, .1);
+}
+
+.form-actions {
+  display: flex;
+  gap: .5rem;
+  padding: 0 1rem 1rem 1rem;
+}
+```
+
 
 
