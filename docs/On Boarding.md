@@ -71,8 +71,6 @@ Before clicking Create Branch, make sure that you select Development as the bran
 
 Once the branch is created, click the Publish Branch button. This publishes the branch to the remote repository, which allows others to access it and enables you to merge your code later.  
 
----
-
 ## Step 1 (Command Line)
 
 First, switch to the Development branch by running this command in the terminal:
@@ -92,6 +90,8 @@ Finally, publish your new branch to the remote repository with this command:
 ```bash
 git push -u origin OnBoarding-YourName
 ```
+
+--- 
 
 ## Step 2 (GitHub Desktop and Command Line)
 
@@ -116,6 +116,8 @@ dotnet build
 ```
 If the project builds successfully (which it should), you are ready to continue.
 
+---
+
 ## Step 4
 
 Now let’s begin understanding how the ASP.NET framework works, specifically how to go from code to a viewable web page.  
@@ -137,7 +139,7 @@ Next, navigate to the `Home.razor` file. Its path should be `AiTutor/Components/
 
 This creates a navigation link to the page you just built, allowing you to view and access your onboarding page. Save your changes and try it out to confirm that everything is working.
 
-
+---
 
 ## Step 5
 
@@ -193,6 +195,8 @@ Replace it with this line, inserted directly beneath the `@page` directive:
 ```
 
 This connects your `.razor.cs` file to your `.razor` file, which allows you to use the variables, methods, and services defined in the backend file inside the frontend file.
+
+---
 
 ## Step 6
 
@@ -277,6 +281,7 @@ Then update the database:
 dotnet ef database update
 ```
 
+---
 
 ## Step 7
 
@@ -439,8 +444,15 @@ What these helpers do:
 - `CreateBlankWorker` returns a boilerplate `Worker` tied to a given `CompanyId`. This helps keep initialization consistent.  
 - `NavigateHome` uses `NavigationManager` to return to the home page. The `=>` syntax is an expression body, which is a concise form for single line methods.  
 
+---
 
-Step 8 - Quick step, before we do our front end, lets just fill out our OnBoarding.css file. Css is just styling classes that we can use to make the thigns we show our users pretty. As a rule of the project, we have different levels of css attempting to have shared css at more general levels of the project so that we don't have to repeat css styles. However, it can be difficult to follow while in development, so it is something we are not 100% strict with, and try to do once the actual development is done. Add this to your .css file
+## Step 8
+
+Before we move on to the front end, let us set up some styling for the onboarding page. CSS is used to style HTML elements and make them visually appealing for users.  
+
+In this project, we follow a convention of having shared CSS at higher levels of the project to avoid repeating styles across components. However, during development this can be difficult to manage, so it is not enforced strictly until later in the process.  
+
+Add the following to your `OnBoarding.razor.css` file:
 
 ```css
 .onboarding {
@@ -600,10 +612,18 @@ Step 8 - Quick step, before we do our front end, lets just fill out our OnBoardi
 }
 ```
 
-Step 9 - Almost done! Since this is a backend focused exercise, we will not go through anything past the basics of front end development. These are things we are confident you can learn on your own (much of the project will have things you can look at for reference!). Replace your entire OnBoarding.razor.cs file with the following code.
+This stylesheet provides utility classes for layout, typography, buttons, cards, tables, and forms. You will use these styles in the next steps when building the front end of the onboarding page.
+
+
+---
+
+## Step 9
+
+Almost done. Since this is a backend focused exercise, we will only cover the basics of front end development here. You can learn more by exploring existing pages in the project for reference.
+
+**Important correction:** replace the contents of your `OnBoarding.razor` file, not the `.razor.cs` file, with the markup below.
 
 ```html
-
 @page "/OnBoarding"
 @inherits AiTutor.Components.OnBoarding.OnBoardingComponent
 
@@ -672,7 +692,7 @@ Step 9 - Almost done! Since this is a backend focused exercise, we will not go t
                 </table>
             </div>
         }
-        </section>
+    </section>
 
     @if (ShowNewWorkerForm)
     {
@@ -685,12 +705,12 @@ Step 9 - Almost done! Since this is a backend focused exercise, we will not go t
                 <div class="form-grid">
                     <div class="form-field">
                         <label for="first">First Name</label>
-                        <InputText id="first" class="input" @bind-Value="NewWorker.FirstName"/>
+                        <InputText id="first" class="input" @bind-Value="NewWorker.FirstName" />
                     </div>
 
                     <div class="form-field">
                         <label for="last">Last Name</label>
-                        <InputText id="last" class="input" @bind-Value="NewWorker.LastName"/>
+                        <InputText id="last" class="input" @bind-Value="NewWorker.LastName" />
                     </div>
 
                     <div class="form-field">
@@ -714,15 +734,64 @@ Step 9 - Almost done! Since this is a backend focused exercise, we will not go t
 </div>
 ```
 
-There is alot going on here, so let's highlight the important things. Firstly, you are able to write C# code in your front end file. You do this by signaling it with an @ symbol. Next, we have lots of buttons in this page, and you may be wondering how we link them to our functions we have written. We do this using the @onclick handler. You can do two things with this, you can link it either to a function in your backend, or a lambda function you define on the fly. Next, we have an EditForm tag, provided by ASP.NET, which lets us handle submitting and filling out forms or other similar things. We can define what to do On Submit, and then populate inside the form what we want to show. We can then link a button to be the button to trigger the submit, with the type = "submit" inside the button html. Additionally, We also use the @bind-Value tag. What this does is allow for variables to link from user input to our backend variables. As an example, we bind something like the First Name in the EditForm, allowing for when the user types in a first name, it goes and links to our actual FirstName variable inside our Worker. This is super helpful so that you don't need multiple variables, one for front end one in backend, and then having to link them. Those are the primary things that we wanted to cover in the front end. Most of the rest is just html and C# code that you should be relatively familiar with already. If you are unfamiliar with C#, the code in this page and other pages give many examples for how to use C#. Additionally, there is additional C# documentation that is relavent to the project that you may want to review/check out when done with this tutorial. Once you have done that, in the terminal, run <code>dotnet run</code> in the terminal, and try navigating to your OnBoarding page. See if what you thought was going to happen is what happened when interacting with the page! If not, try to look back and understand why!
+Key ideas in this markup:
 
-Step 10 - Quick Step! Review previous steps if you are still confused have questions, try to link everything you've learned and fully understand how everything works together one last time before our last step!
+- You can write C# directly in a Razor page by prefixing expressions with `@`.  
+- Event handlers such as `@onclick` link UI elements to methods in your component class. You can reference an existing method like `ToggleShowResearchAssistants`, or use a lambda like `@(() => ShowNewWorkerForm = !ShowNewWorkerForm)`.  
+- `EditForm` is provided by ASP.NET, and it handles validation and form submission. Use `OnValidSubmit` to specify what should happen when the form is valid and submitted.  
+- `@bind-Value` creates two way binding between inputs and your component properties, for example binding `NewWorker.FirstName` so user input updates the model automatically.
 
-Step 11 - Last step! In this step, we will learn how to merge your code between the branches we made at the beginning. First of all, make sure you push and commit all of the things we've done, either through github desktop or the command line. From here, go to your specific section to see how to merge your code.
+When you are ready to test, run the app and navigate to your onboarding page:
 
-Github Desktop - Okay, in github desktop, there should be a big blue button that says create pull request. Click it, it should open a tab in google or whatever browser you work in, that directs to Github, log in if needed. Now, in the top left, it should show the main branch and your current branch, with an arrow linking them. Click the main branch button and switch it to the OnBoarding-*YourName* branch. This will make it so that we are merging code from OnBoarding-*YourName*-Second into OnBoarding-*YourName*. Now click create pull request. Then, reload the page. Scroll down a bit and then you should see a button that says Merge pull request. Click that button, and then confirm if needed. Now, our branches are merged! 
+```bash
+dotnet run
+```
 
-Command Line - Okay, in your terminal, run the command `gh pr create --base OnBoarding-*YourName* --head OnBoarding-*YourName*-Second`. This should open a tab in your browser, log in if needed. Now, in the top left, it should show the base branch and your current branch, with an arrow linking them. Click the base branch button and switch it to the OnBoarding-*YourName* branch. This will make it so that we are merging code from OnBoarding-*YourName*-Second into OnBoarding-*YourName*. Now click create pull request. Then, reload the page. Scroll down a bit and then you should see a button that says Merge pull request. Click that button, and then confirm if needed. Now, our branches are merged!
+Open the browser to the app’s base URL, then go to `/OnBoarding`. Interact with the page, add a worker, and toggle the research assistant filter. If the result is not what you expected, review the steps and code to understand why, then iterate.
 
 
-Easy right?! This time at least, if there are conflicts, it will not let you merge unless you have resolved the issues. When you run into this your first time, be sure to reach out to someone who knows how to deal with merge conflicts and ask them to walk you through it for the first time. Now you're done! You have succesfully made a page, models, and some logic, and merged your changes into a branch. This is the whole development process in a nutshell! The last thing you have to do now, is switch back to the Development Branch, or whichever branch you were assigned to start on. Since this was just an exercise, and we don't want this code on our actual codebase, just delete the two branches you made during the exercise. Goodluck with the rest of your development!
+---
+
+## Step 10
+
+Quick step. If anything is unclear, review the previous steps and your code. Try to connect each concept you have learned, and make sure you understand how they work together, from models and relationships, to data access with `ApplicationDbContext`, to dependency injection with `[Inject]`, to component lifecycle with `OnInitializedAsync`, to two way binding with `@bind-Value`, to event handling with `@onclick`, to navigation with `NavigationManager`. Confirm that you can explain, in your own words, how data flows from the database to the component, how the UI displays that data, and how user actions update the database and refresh the UI.
+
+When you feel confident, move on to the final step.
+
+---
+
+## Step 11
+
+Last step. In this step, we will merge the branches we created at the beginning of the exercise.  
+
+First, make sure you have committed and pushed all of your changes, either using GitHub Desktop or the command line. Then follow the instructions for your preferred workflow.
+
+### GitHub Desktop
+
+In GitHub Desktop, click the big blue button labeled **Create Pull Request**. This will open a tab in your default browser, directing you to GitHub. Log in if prompted.  
+
+In the top left, you will see the base branch and your current branch, connected by an arrow. Click the base branch and switch it to `OnBoarding-YourName`. This ensures that you are merging code from `OnBoarding-YourName-Second` into `OnBoarding-YourName`.  
+
+Click **Create Pull Request**. Once the pull request is open, reload the page, scroll down, and click **Merge pull request**. Confirm if prompted. Your branches are now merged.  
+
+### Command Line
+
+In your terminal, run the following command to open a pull request:
+
+```bash
+gh pr create --base OnBoarding-YourName --head OnBoarding-YourName-Second
+```
+
+This will open a tab in your browser. Log in if needed. In the top left, you will see the base branch and your current branch. Switch the base branch to `OnBoarding-YourName`, so the merge will go from `OnBoarding-YourName-Second` into `OnBoarding-YourName`.  
+
+Click **Create Pull Request**, then reload the page. Scroll down and click **Merge pull request**, confirming if necessary. Your branches are now merged.  
+
+---
+
+Easy, right? At least this time it should be. If there are merge conflicts, GitHub will not let you merge until they are resolved. The first time you encounter this, ask someone experienced to walk you through the process.  
+
+And that is it. You have successfully built a page, created models, added backend logic, and merged your changes into a branch. This represents the entire development process in a nutshell.  
+
+The last step is to switch back to the `Development` branch, or whichever branch you were assigned at the start. Since this was only an exercise, delete the two onboarding branches you created so the training code does not remain in the repository.  
+
+Good luck with the rest of your development work.
