@@ -412,5 +412,117 @@ Step 8 - Quick step, before we do our front end, lets just fill out our OnBoardi
 }
 ```
 
+Step 9 - Last step! Since this is a backend focused exercise, we will not go through anything past the basics of front end development. These are things we are confident you can learn on your own (much of the project will have things you can look at for reference!). Replace your entire OnBoarding.razor.cs file with the following code.
 
+```html
+
+@page "/OnBoarding"
+@inherits AiTutor.Components.OnBoarding.OnBoardingComponent
+
+@using Job = AiTutor.Data.Models.OnBoarding.Job
+@using Worker = AiTutor.Data.Models.OnBoarding.Worker
+
+<div class="onboarding">
+    <header class="header">
+        <div>
+            <h1 class="title">@(Company?.CompanyName ?? "Company")</h1>
+            @if (!string.IsNullOrWhiteSpace(QueryMessage))
+            {
+                <p class="subtitle">Message: @QueryMessage</p>
+            }
+        </div>
+
+        <div class="toolbar">
+            <button class="btn" @onclick="ToggleShowResearchAssistants">
+                @(ShowResearchAssistants ? "Show All Workers" : "Show Only Research Assistants")
+            </button>
+
+            <button class="btn btn-primary" @onclick="@(() => ShowNewWorkerForm = !ShowNewWorkerForm)">
+                @(ShowNewWorkerForm ? "Close New Worker Form" : "New Worker")
+            </button>
+
+            <button class="btn btn-ghost" @onclick="NavigateHome">Home</button>
+        </div>
+    </header>
+
+    <section class="card">
+        <div class="card-header">
+            <h2 class="section-title">
+                @(ShowResearchAssistants ? "Research Assistants" : "All Workers")
+                <span class="count">(@ResearchAssistants.Count)</span>
+            </h2>
+        </div>
+
+        @if (ResearchAssistants.Count == 0)
+        {
+            <div class="empty">
+                <p>No workers to display.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>First</th>
+                            <th>Last</th>
+                            <th>Job</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (Worker Worker in ResearchAssistants)
+                        {
+                            <tr>
+                                <td>@Worker.FirstName</td>
+                                <td>@Worker.LastName</td>
+                                <td>@Worker.Job</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        </section>
+
+    @if (ShowNewWorkerForm)
+    {
+        <section class="card">
+            <div class="card-header">
+                <h2 class="section-title">Create New Worker</h2>
+            </div>
+
+            <EditForm Model="NewWorker" OnValidSubmit="@(() => AddWorkerToCompany(NewWorker))">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="first">First Name</label>
+                        <InputText id="first" class="input" @bind-Value="NewWorker.FirstName"/>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="last">Last Name</label>
+                        <InputText id="last" class="input" @bind-Value="NewWorker.LastName"/>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="job">Job</label>
+                        <InputSelect id="job" class="input" @bind-Value="NewWorker.Job">
+                            @foreach (Job job in Enum.GetValues<Job>())
+                            {
+                                <option value="@job">@job</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add Worker</button>
+                    <button type="button" class="btn" @onclick="@(() => ShowNewWorkerForm = false)">Cancel</button>
+                </div>
+            </EditForm>
+        </section>
+    }
+</div>
+```
 
