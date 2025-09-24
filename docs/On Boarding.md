@@ -412,7 +412,7 @@ Step 8 - Quick step, before we do our front end, lets just fill out our OnBoardi
 }
 ```
 
-Step 9 - Last step! Since this is a backend focused exercise, we will not go through anything past the basics of front end development. These are things we are confident you can learn on your own (much of the project will have things you can look at for reference!). Replace your entire OnBoarding.razor.cs file with the following code.
+Step 9 - Almost done! Since this is a backend focused exercise, we will not go through anything past the basics of front end development. These are things we are confident you can learn on your own (much of the project will have things you can look at for reference!). Replace your entire OnBoarding.razor.cs file with the following code.
 
 ```html
 
@@ -525,4 +525,6 @@ Step 9 - Last step! Since this is a backend focused exercise, we will not go thr
     }
 </div>
 ```
+
+There is alot going on here, so let's highlight the important things. Firstly, you are able to write C# code in your front end file. You do this by signaling it with an @ symbol. Next, we have lots of buttons in this page, and you may be wondering how we link them to our functions we have written. We do this using the @onclick handler. You can do two things with this, you can link it either to a function in your backend, or a lambda function you define on the fly. Next, we have an EditForm tag, provided by ASP.NET, which lets us handle submitting and filling out forms or other similar things. We can define what to do On Submit, and then populate inside the form what we want to show. We can then link a button to be the button to trigger the submit, with the type = "submit" inside the button html. Additionally, We also use the @bind-Value tag. What this does is allow for variables to link from user input to our backend variables. As an example, we bind something like the First Name in the EditForm, allowing for when the user types in a first name, it goes and links to our actual FirstName variable inside our Worker. This is super helpful so that you don't need multiple variables, one for front end one in backend, and then having to link them. Those are the primary things that we wanted to cover in the front end. Most of the rest is just html and C# code that you should be relatively familiar with already. If you are unfamiliar with C#, the code in this page and other pages give many examples for how to use C#. Additionally, there is tons of C# documentation online to answer any syntax questions you may have. Give the rest of the front end page a run through and see if you can understand everything that's going on. Once you have done that, in the terminal, run <code>dotnet run</code> in the terminal, and try navigating to your OnBoarding page. See if what you thought was going to happen is what happened when interacting with the page! If not, try to look back and understand why!
 
