@@ -1,24 +1,127 @@
-Welcome to the Pedalogical On Boarding Document! By following the documentation, you will familiarze yourself with the Pedalogical codebase & conventions, C# coding, the ASP.NET Framework, PostgreSQL, and Git branching & merging! 
+# Welcome to the Pedalogical Onboarding Document
 
-Intro/Overview Section - Pedalogical uses the ASP.NET Web Development Framework. What this means is that a pre-built base set of functionalities built for web development are provided to us when we created the project. These functionalities make communicating between Front-end & Back-end functionality much simpler and fast. If you are unfamiliar with the terms, front-end refers to the things that users see and interact with, typically HTML and CSS. Back-end refers to the logic that goes on behind the scenes to make sure that what users are seeing is up to date.
+By following this guide, you will familiarize yourself with the Pedalogical codebase and its conventions, C# coding, the ASP.NET framework, PostgreSQL, and Git branching and merging.
 
-Git - Pedalogical uses Git Version Control to manage the project. Git provides many helpful tools for making sure the project stays organized and that development is seperate from a deployed version of the project. Typically, projects will have branches. Branches are different versions of the codebase. The "main" branch is the version of the code that is deployed, meaning what users interact with. Additionally, there are usually Development branches, which are branches where new features are added, tested, etc. In Pedalogical, we use a main branch for our deployed version, and a single development branch for new changes. However, since there are multiple people typically working on the project, it is not possible for everyone to use the Development branch, due to the issues with differences in code as development happens. Because of this, the development branch is protected, meaning you cannot push your changes directly to Development. Instead, you must make a branch off of Development, and do your work there. But this raises the question, how do we combine all our changes into Dev, and then eventually into main? To accomplish this, we use merging. Merging is a functionality that allows developers to combine their code. Merging however is not as simple as clicking a button, more often than not, there are merge conflicts. Merge conflicts arise when there are more than one set of changes to the same part of code, in this scenario, git doesn't know which to take (or to take both), so it's up to the developer to resolve these issues. THis can be confusing, so let's move to an example to illustrate when a merge conflict may happen. 
+---
 
-Merge Conflict - Say we have 2 Pedalogical Developers, Teo and Ben. Teo is tasked on fixing a bug with the Home page, while Ben is tasked on cleaning up the code for the Home page. Both of these tasks require Teo and Ben working in the same area in the codebase. To begin, both Teo and Ben create new branches from the Development branch. Eventually, Teo finishes his task first, so he merges his code back into Development. Now, since Ben hasn't merged his code yet, Development hasn't been updated to be different from where Teo branched off of. As a result, there are no merge conflicts, Git essentially just takes Teo's changes and updates them in Dev. However, now when Ben tries to merge, Git raises a merge conflict, because it can't just take Ben's code and put it onto Development, since Teo has put some new code that Ben's branch doesn't have. So, before merging, Ben must go through the conflicts, and manually tell Git what to do with the different versions of code. Typically, per conflict, you have a couple options: accepting 1 of the 2 versions of code, accepting both versions of the code, or doing one of the previous options and manually updating the code in the case where there needs some code written to make sure things work. After all merge conflicts have been resolved, the code can be merged into Development. Now, this does not necessarily mean the code works, but there are no conflicts from Git's perspective. Luckily, our Pedalogical Development branch is protected, so before you can push the merged changes, it must build (compile).
+## Intro / Overview
 
-Making A New Branch - Now that you have a basic understanding of everything, let's try getting some hands on expirience. Because merging can be extremeley complicated and error prone, this on boarding exercise will not require you to solve any merge conflicts. It will require you merge, but it will be very smooth and easy. However, do be aware that merging is not always going to be easy. To avoid having to solve merge conflicts, communicate with the Team and try to avoid working in the same areas of the codebase, although it is inevitable, merge conflicts are preventable is many cases, especially with a smaller team. 
+Pedalogical is built on the ASP.NET web development framework. This framework provides a robust set of pre-built functionalities designed for building modern web applications. These built-in tools simplify communication between the front end and the back end of the project, allowing us to develop features more quickly and reliably.
 
-To begin, first identify whether you are using Git through the command line or through Github Desktop. Either works, although it is reccomended that you use Github Desktop. Github Desktop is extremeley helpful for simple Git tasks and general organization & representation of changes to the repository. The command line becomes helpful for more complex tasks involving Git, which we will not cover today, and you likely will not run into often. 
+If you are new to the terminology:
+- **Front end** refers to everything users see and interact with directly (typically written in HTML, CSS, and JavaScript).  
+- **Back end** refers to the application logic running behind the scenes to process data and ensure the information displayed on the front end is up to date.
 
-Step 1 (Github Desktop) - First, create a new branch of from Development. On Github Desktop, click the Current Branch Tab, which should open a dropdown. Select the Development branch to switch the the development branch. Now go back to the Current Branch Tab and open the dropdown once again. In the top right, it should say new branch, click that. Then name your branch OnBoarding-*YourName*. Before clicking create, make sure that you select to branch of from Development, NOT main. Once created, click the Publish Branch Button. This publishes the branch to the remote repository, which means that others can access the branch aswell, and you can merge your code.
+---
 
-Step 1 (Command Line) - First, run this command to switch to the Development Branch: <code>git checkout Development</code> in the command line. Make sure you are already inside the AiTutor Repository (use cd and the file path to get there if you aren't) or else the command won't work. Next, run this command to make your new branch: <code>git checkout -b OnBoarding-*YourName*</code>.  Lastly, run this command To publish the branch to the remote repository: <code>git push -u origin OnBoarding-*YourName*</code> 
+## Git
 
-Step 2 (Github Desktop & Command Line) - At this point, if everything was done correctly, you should be currently on your new branch. Next, repeat the process, creating a new branch called OnBoarding-*YourName*-Second. Make sure to create this branch from the branch you previously created, NOT Development.
+Pedalogical uses Git version control to manage its codebase. Git helps us keep the project organized and ensures that development can proceed without interfering with the deployed version.
 
-Step 3 - From this point, the instructions are majority agnostic to whether you are using Github Desktop or the Command Line. We will now begin working in the codebase. First, identify the *Components* folder within the project, it's path should be AiTutor/Components. Within this folder, create a new folder called OnBoarding. Next, create three files within the OnBoarding folder: OnBoarding.razor, OnBoarding.razor.cs, OnBoarding.razor.css. Once you have made these files, confirm everything with your project is working by running the command dotnet build. If the project builds, which it should, we are good to continue. 
+Git projects are typically organized into **branches**. A branch is a version of the codebase. The `main` branch represents the deployed version of Pedalogical, the one users interact with. In addition, there is usually a **development branch**, where new features are added and tested.
 
-Step 4 - Lets begin understanding how the ASP.NET framework works, namely how to go from code to viewable web pages. Inside your OnBoarding.razor file, add the following code.
+At Pedalogical, we use:
+- A `main` branch for production (deployed code).  
+- A `development` branch for ongoing work.  
+
+Because multiple developers work on the project simultaneously, we cannot all work directly on the development branch. If everyone pushed changes there, the codebase would quickly become unstable. To prevent this, the development branch is **protected**, meaning you cannot push changes to it directly. Instead, you create a **feature branch** from development, do your work there, and later merge it back into development. This raises the question: how do we combine all of our changes into development, and eventually into main? The answer is **merging**.
+
+Merging is the process of combining code from one branch into another. While this can sometimes be straightforward, it often leads to **merge conflicts**. A merge conflict happens when two branches contain changes to the same part of the code, and Git cannot automatically decide which version to keep. In these cases, it is up to the developer to resolve the conflict.
+
+---
+
+## Merge Conflicts
+
+Here is a practical example:  
+
+Suppose we have two developers, **Teo** and **Ben**.  
+- Teo is fixing a bug on the Home page.  
+- Ben is cleaning up the code for the Home page.  
+
+Both developers create branches from the development branch. Teo finishes first and merges his changes into development. Because Ben has not merged yet, development has no conflicts, Git simply applies Teo’s changes.
+
+Later, when Ben attempts to merge his branch, Git detects conflicts. This is because Teo’s changes have already modified parts of the code that Ben also worked on. Git does not know how to combine them automatically. Before the merge can succeed, Ben must resolve these conflicts by choosing one version, keeping both, or making manual edits to ensure everything works together. Once the conflicts are resolved, the branch can merge into development.  
+
+Note: a successful merge only means there are no Git-level conflicts. It does not guarantee that the application works as expected. That is why our development branch is protected, before merged changes can be accepted, the project must compile successfully.
+
+---
+
+## Making a New Branch
+
+Now that you understand the basics, let us get some hands-on experience.  
+
+This onboarding exercise will have you create and merge a branch, but without dealing with merge conflicts. In practice, conflicts can be complex and error-prone, so this simplified workflow will let you get comfortable with the process before encountering them in real work.  
+
+To reduce the chances of merge conflicts in the future, always communicate with your team about what areas of the code you are working on. While conflicts are inevitable in larger projects, they can often be avoided in smaller teams through good coordination.
+
+---
+
+## Git Tools
+
+You can use either **GitHub Desktop** or the **command line** for Git operations. Both work, though we recommend GitHub Desktop for onboarding. GitHub Desktop provides a clean interface for common tasks like committing and merging, making it easier to visualize your changes. The command line is more powerful and flexible, but typically only necessary for advanced Git operations, which you are unlikely to need early on.
+
+
+## Step 1 (GitHub Desktop)
+
+First, create a new branch from Development. In GitHub Desktop, click the Current Branch tab, which will open a dropdown. Select the Development branch to switch to it.  
+
+Next, go back to the Current Branch tab and open the dropdown again. In the top right, you will see an option for New Branch. Click that. Name your branch `OnBoarding-YourName`.  
+
+Before clicking Create Branch, make sure that you select Development as the branch to base your new branch on, not main.  
+
+Once the branch is created, click the Publish Branch button. This publishes the branch to the remote repository, which allows others to access it and enables you to merge your code later.  
+
+---
+
+## Step 1 (Command Line)
+
+First, switch to the Development branch by running this command in the terminal:
+
+```bash
+git checkout Development
+```
+Make sure you are already inside the AiTutor repository (use cd and the file path to get there if you are not), otherwise the command will not work.
+Next, create a new branch with this command:
+
+```bash
+git checkout -b OnBoarding-YourName
+```
+
+Finally, publish your new branch to the remote repository with this command:
+
+```bash
+git push -u origin OnBoarding-YourName
+```
+
+## Step 2 (GitHub Desktop and Command Line)
+
+At this point, if everything was done correctly, you should already be on your new branch. Now repeat the process, creating another branch called `OnBoarding-YourName-Second`. Make sure to create this branch from the branch you just created (`OnBoarding-YourName`), not from Development.  
+
+---
+
+## Step 3
+
+From this point forward, the instructions apply whether you are using GitHub Desktop or the command line.  
+
+We will now begin working in the codebase. First, locate the `Components` folder within the project. Its path should be `AiTutor/Components`.  
+
+Inside the `Components` folder, create a new folder named `OnBoarding`.  
+
+Within the `OnBoarding` folder, create the following three files: `OnBoarding.razor`, `OnBoarding.razor.cs`, and `OnBoarding.razor.css`.  
+
+Once these files are created, confirm that your project is working correctly by running the build command:
+
+```bash
+dotnet build
+```
+If the project builds successfully (which it should), you are ready to continue.
+
+## Step 4
+
+Now let’s begin understanding how the ASP.NET framework works, specifically how to go from code to a viewable web page.  
+
+Inside your `OnBoarding.razor` file, add the following code:
+
 ```html
 @page "/OnBoarding"
 
@@ -26,13 +129,20 @@ Step 4 - Lets begin understanding how the ASP.NET framework works, namely how to
     <h1>Hello New Pedalogical Worker!</h1>
 </div>
 ```
-Now, navigate to the Home.razor file. It's path should be AiTutor/Components/Pages/HomeFolder/Home.razor. Scroll down to the bottom of the page, and add the following code.
+
+Next, navigate to the `Home.razor` file. Its path should be `AiTutor/Components/Pages/HomeFolder/Home.razor`. Scroll to the bottom of the file and add this code:
 ```html
 <a class="btn btn-primary" href="/OnBoarding">On Boarding Page</a>
 ```
-This will allow us to navigate, view, and access the page we created in the previous step, and view our message. Try it out!
 
-Step 5 - Now, lets get into some of the more interesting & technical capabilities of ASP.NET and C#. Inside the OnBoarding.razor.cs, add the following code chunk.
+This creates a navigation link to the page you just built, allowing you to view and access your onboarding page. Save your changes and try it out to confirm that everything is working.
+
+
+
+## Step 5
+
+Now let us get into some of the more technical capabilities of ASP.NET and C#. Inside the `OnBoarding.razor.cs` file, add the following code:
+
 ```csharp
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
@@ -48,21 +158,50 @@ public partial class OnBoardingComponent : ComponentBase
     [Inject] public ILogger<OnBoardingComponent> Logger { get; set; } = default!;
 }
 ```
-In ASP.NET, using other sections of code outside of your folder scope requires direct reference/requesting of the functionality. Doing this requires a using statement. Sets of code are organized into namespaces. Essentially just a way to reference where your code is without having to reference the direct file path. Namespaces can encapsulate multiple files. So, if you wanted to access code, classes, etc, from our OnBoarding tutorial, you'd have to include a using statement referencing its namespace. The other using statements that we have included are required for making sure we do not get errors with the rest of the code chunk. In the code chunk, we define a public partial class that inherits from the ComponentBase class, a class provided by ASP.NET that allows for communicaiton between the backend and frontend file. The partial keyword ensures we can extend the class in other areas of the code, if needed. Typically it isn't needed, but it is a convention we follow. The [Inject] keywords are what we call Dependency Injection. Dependency Injection is a coding concept that essentially takes work away from the code youa re currently working, by asking for what it needs, rather than creating it interally. The inject keyword is handeled by .NET, where it in the background handles the creation & assignment of the required service. The {get;set;} keywords define basic get and set methods for the object, making it into a property. This is useful in many cases, first, it allows for reference of the variable in the .razor file, which we will demonstrate later. Additionally, it allows you define more complex/protected get and set methods easily, without having to fully flesh out a method for it. The default keyword tells .NET to initialize the varible with its default value, typically null, but not always. Regardless, .NET may complain and throw a warning, saying that the variable may be null. By adding the ! signature, we tell .NET that it won't be null by the time we use it. Now, for the actual things we are injecting, DbContextFactory is a service we use to build connections to the databse, Navigation Manager is a ASP.NET provided service that lets us navigate to different pages, and the Logger allows us to Log information for debugging and other similar purposes.
 
-Next, go to the OnBoarding.razor file and remove the following: 
+In ASP.NET, using code that lives outside your current folder scope requires explicitly referencing it. You do this with a `using` statement. Code is organized into `namespace`s, which are labels that group related files. Namespaces let you reference code, classes, and methods without specifying a direct file path.
+
+The `using` statements at the top of the file import the namespaces required for this class to compile.
+
+In the code above, we define a `public partial class` that inherits from the `ComponentBase` class. `ComponentBase` is provided by ASP.NET and enables communication between backend logic and the frontend Razor file. The `partial` keyword allows the class definition to be split across multiple files if needed. While this is not always necessary, it is a convention we follow in Pedalogical.
+
+The `[Inject]` attributes demonstrate **dependency injection**. Dependency injection is a pattern where external services are provided by the framework, rather than being created manually inside your class. The .NET runtime creates and assigns these services for you.
+
+The `{ get; set; }` syntax defines properties, which allow values to be accessed and updated. Properties can be referenced directly in the Razor file, and you can add more complex logic later if needed.
+
+The `default` keyword initializes the variable with its default value, often null. Since .NET may warn about possible null values, the `!` operator tells the compiler that the value will not be null at runtime.
+
+Here is what the injected services do in this example:
+- `DbContextFactory` creates database contexts so you can talk to the database.
+- `NavigationManager` is an ASP.NET service that lets you navigate between pages.
+- `Logger` is used for logging, which helps with debugging and monitoring.
+
+---
+
+Next, go to the `OnBoarding.razor` file and remove the following code:
+
 ```html
 <div>
     <h1>Hello New Pedalogical Worker!</h1>
 </div>
 ```
-Now, insert this code underneath the @page: 
+
+Replace it with this line, inserted directly beneath the `@page` directive:
+
 ```html
 @inherits AiTutor.Components.OnBoarding.OnBoardingComponent
 ```
-This connects the code from our .razor.cs file to our .razor file, allowing us to use the variables, methods, etc, within the backend file, in our frontend. 
 
-Step 6 - Now, lets expand on our new page. We will now explore using actual data and how logic involving it might actually look. Lets now navigate to the Models folder, its path is AiTutor/Data/Models. In the Models folder, create a new folder called OnBoarding. Next, create a file called Company.cs and another file called Worker.cs. In the Company.cs file, copy the following code:
+This connects your `.razor.cs` file to your `.razor` file, which allows you to use the variables, methods, and services defined in the backend file inside the frontend file.
+
+## Step 6
+
+Now let us expand on our new page. We will start using actual data and see what logic involving it might look like.  
+
+Navigate to the `AiTutor/Data/Models` folder. Inside the `Models` folder, create a new folder called `OnBoarding`. Next, create two files: `Company.cs` and `Worker.cs`.  
+
+In the `Company.cs` file, add the following code:
+
 ```csharp
 namespace AiTutor.Data.Models.OnBoarding;
 
@@ -73,7 +212,9 @@ public class Company
     public List<Worker> Workers { get; set; } = [];
 }
 ```
-In the Worker.cs file, copy the following code: 
+
+In the `Worker.cs` file, add the following code:
+
 ```csharp
 namespace AiTutor.Data.Models.OnBoarding;
 
@@ -93,12 +234,12 @@ public enum Job
     AssistantProfessor,
     TeachingAssistant,
     AssociateProfessor
-    
 }
 ```
 
+What we have defined here are two classes with a relationship. In plain terms, a company has many workers, while a single worker only has one company. Humans understand this intuitively, but the computer requires explicit instructions about these relationships so it can enforce them and throw errors when the rules are broken. This is why databases are called relational.  
 
-What we have defined here are two classes with a relationship. In english, you could say that a company has many workers, while a single worker only has one company. This relationship is intuitively understood by you, the human, but it's not as clear to the computer, it wants to know exactly what the relationship is, to be able to throw errors if something breaks that relationship. This is why databases are called "relational". In this case, this is a One To Many Relationship. To define this, go to the ApplicationDbContext.cs file, it's path should be AiTutor/Data/ApplicationDbContext.cs. Add this code to the bottom, below all the existing code.
+In this case, the relationship is **One to Many**. To define this relationship, go to the `ApplicationDbContext.cs` file located at `AiTutor/Data/ApplicationDbContext.cs`. Add the following code to the bottom of the file, beneath the existing code:
 
 ```csharp
 public DbSet<Company> Companies => Set<Company>();
@@ -113,11 +254,34 @@ modelBuilder.Entity<Worker>()
     .HasForeignKey(w => w.CompanyId)
     .OnDelete(DeleteBehavior.Cascade); 
 ```
-What this code is doing is a couple important things. The DbSet allows us to work with the Worker and Company data inside our code in a special fashion using somethign called LINQ, which we will cover in later steps. The ToTable allows us to configure the table name of a class inside the database to something more intuitive. Lastly, the last section of code is how we define the One To Many relationship between Company and Worker. When defining a relationship like this, you always define it from the perspective of the dependent. In this case, the worker, because a company can have any amount of workers, it's agnostic to how many and who those workers are. However, a worker cannot exist without a company, so it is the dependent class. We strictly define that it can only have one Company, then we clarify that the same company can have other workers, defining the One to Many relationship. We then define the forgein key, which is the identifer that the Worker will have that links it to a specific company, this will allows us to grab all workers from a company easily. Lastly, we have an on delete behavior that tells the database to delete all workers under a specifc company when its deleted. This does not mean that if a worker is deleted, the comapny is deleted, it's only one direction.
 
-Now we are done defining the classes and relationships to be used in our code! The last thing we have to do is run a migration, we ensures our changes are reflected in the database. In your terminal, run the command <code>dotnet ef migrations add OnBoardingMigration</code> then run <code>dotnet ef database update</code>
+This code does three important things:  
 
-Step 7 - Now let's actually do some cool stuff with our new Worker and Company models. Let's go back to our OnBoarding.cs file we made a couple steps ago. Replace your current code with the following.
+1. The `DbSet` lines allow us to work with `Company` and `Worker` data inside our code using LINQ, which we will cover in later steps.  
+2. The `ToTable` lines configure the table names in the database so they are more intuitive.  
+3. The `HasOne`...`WithMany`...`HasForeignKey` block defines the One to Many relationship between `Company` and `Worker`.  
+
+When defining relationships, you always define them from the perspective of the dependent. In this case, the dependent is the `Worker`, because a company can exist with any number of workers, but a worker cannot exist without a company. We strictly define that a worker can only have one `Company`, while a `Company` can have many `Workers`. The `HasForeignKey` defines the link a worker must have to its company, which allows us to easily retrieve all workers for a given company.  
+
+Finally, the `OnDelete(DeleteBehavior.Cascade)` ensures that when a company is deleted, all workers under that company are also deleted. This behavior is one-directional: if a worker is deleted, the company remains.  
+
+Now that the classes and relationships are defined, the last step is to run a migration so the database reflects these changes. In your terminal, run the following commands:
+
+```bash
+dotnet ef migrations add OnBoardingMigration
+```
+
+Then update the database:
+
+```bash
+dotnet ef database update
+```
+
+
+## Step 7
+
+Now let us do something useful with the new `Worker` and `Company` models. Open the code behind file for your onboarding component, which is `OnBoarding.razor.cs`. Replace its current contents with the following:
+
 ```csharp
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
@@ -141,116 +305,140 @@ public partial class OnBoardingComponent : ComponentBase
     protected bool ShowNewWorkerForm { get; set; }
 }
 ```
-In this, we have added a couple new things. Firstly, we have added a using statement at the top that allows us to access the Worker and Company models we made in the previous step. Additionally, we have added a query parameter. This is a value that we pass in through the url when navigating to our page, that we parse and store as a variable. It will not be particularly useful in this exercise, but it's good to know how to use it, as it is widely used for passing through Id's across pages throughout the project. Next, we define a Company variable, making it nullable. Next, we define a List of Workers that will be the Workers from our company. We also define another list of Workers that uses LINQ, which stands for language integrated query, a nicely defined set of commands that help us query our data, both in memory and from the database. In this LINQ, we use a Where command, which is a filter, with the parameter being our filter condition, in this case, it takes in the paramter w, which is a Worker, then we check whether the workers Job is equal to a Research Assistant. Then we turn that all into a List. We also define another Worker called NewWorker which will let us add new workers to our company. We also define some booleans that we will use for within the html. 
 
-Now, add this code to the bottom of the file (within the Class)
+What changed here:
+
+- Added `using AiTutor.Data.Models.OnBoarding;` so this file can reference the `Company` and `Worker` models created in Step 6.  
+- Added a query parameter `QueryMessage` with `[SupplyParameterFromQuery]`. This lets you pass values through the page URL and have them bound to the property. This pattern is common for passing identifiers across pages.  
+- Declared a nullable `Company` and a list of `Workers`.  
+- Declared a computed property `ResearchAssistants` that filters `Workers` using LINQ. `Where` applies a filter, and `ToList()` materializes the result into a list.  
+- Added a `NewWorker` placeholder that will be used for adding a worker from the UI.  
+- Added two booleans that the UI will use for conditional rendering and filtering.  
+
+Now add the following method to the bottom of the same class:
 
 ```csharp
 protected override async Task OnInitializedAsync()
+{
+    Logger.LogInformation("Hello new Pedalogical worker! QueryMessage = {QueryMessage}", QueryMessage);
+
+    using var DbContext = DbContextFactory.CreateDbContext();
+
+    Company = await DbContext.Companies.Include(c => c.Workers).FirstOrDefaultAsync();
+
+    if (Company is null)
     {
-        Logger.LogInformation("Hello new Pedalogical worker! QueryMessage = {QueryMessage}", QueryMessage);
-
-        using var DbContext = DbContextFactory.CreateDbContext();
-
-        Company = await DbContext.Companies.Include(c => c.Workers).FirstOrDefaultAsync();
-
-        if (Company is null)
-        {
-            Company = new();
-            DbContext.Companies.Add(Company);
-            await DbContext.SaveChangesAsync();
-
-            await AddCurrentStaff(DbContext, Company);
-
-            Company = await DbContext.Companies.Include(c => c.Workers).FirstAsync() ?? throw new InvalidOperationException("Company Must Exist");
-        }
-
-        Workers = Company.Workers;
-
-        NewWorker = new()
-        {
-            CompanyId = Company.Id,
-            FirstName = "Temporary First Name",
-            LastName = "Temporary Last Name",
-            Job = Job.AssistantProfessor
-        };
-    }
-```
-
-Before we talk about what's inside the function, it's important we talk about the function itself, since it's special. OnInitializedAsync is a special function signature recognized by .NET that runs first, when the page loads. It is typically used in cases where you want to load some data or do some modifications to data before showing it to users. The async part of the function is another important part of it. The OnInitialized function can be without the Async part, but they have different purposes. All it means is that there are asynchronous operations inside the OnInitialized function. But what does async even mean? An asynchronous operation is an operation that doesn't block the main thread. The main thread is essentially what allows for UI rendering and processing. If you have an operation that takes time, like a database request, you typically want it to be asynchronous, that way the application isn't frozen while it's going to the database to gather information. Additionally, asyncrhonous requests can also be awaited. What this means is that the code waits for the operation to complete before continuing. This is extremeley powerful and useful in many contexts involving database requests.
-
-Inside our OnInitialized function, we first Log our query message, this isn't relavent other than to show you that what you passed in through the url when navigating gets parsed and stored into the variable. Next, we begin working with the database. First, we establish a connection to the database using the DbContextFactory. This gets a current snapshot of the database and the data it has the current moment. Next, we ask the database to give us some information using our await keyword. All database operations should be asynchronous, that is a pattern that is standard and scalable. What we are requesting is to look at the Companies table and grab the first company it can find. If it can find the company, it returns null (this is the default part of the method signature). Additionally, from the first one, we use a .Include to also include the companies workers. This is not magic however, it doesn't just know which workers are in the company. It does this using the defined relationship from the previous step. The company has an Id value defined, a unique identifier and primary key. By giving each worker in the company this Id under the CompanyId field, the database can look through the workers table and grab all workers with the associated Company Id, this is why it is so powerful, we skip so much unecessary logic with a little bit of pre-measures. This can scaffold down into multiple sub includes, making it even more powerful in many cases! Next, because we haven't actually put any company into the database yet, the whole database call will return null. In this case, we want to insert a Company into the database. So we first check if Company is null and then instantiate a new one, add it to the Companies table, and then save our changes asynchronously once again. Then we call a function to add some current staff (which we will define soon, it will say it doesn't know what that func is which is fine for now). Once we have presumably added our staff, we reload our Company which should now exist in the database! We also make sure to catch it with an exception, to ensure that if anything went wrong we know, since after adding it to DB, there should be no reason why it doesn't load. Next we set our Workers variable to the Companies Workers, just so referencing them is easier. We also create a New Worker that has some filler data, so that when we hook it up to the front end, users can create a new worker that links to this variable. 
-
-Now, lets add the last bit of our backend code
-
-```csharp
-protected async Task AddWorkerToCompany(Worker Worker)
-    {
-        if (string.IsNullOrWhiteSpace(Worker.FirstName) || string.IsNullOrWhiteSpace(Worker.LastName))
-        {
-            Logger.LogWarning("Rejected add: worker must have first and last name.");
-            return;
-        }
-
-        using var DbContext = DbContextFactory.CreateDbContext();
-
-        DbContext.Workers.Add(Worker);
+        Company = new();
+        DbContext.Companies.Add(Company);
         await DbContext.SaveChangesAsync();
 
-        Workers.Add(Worker);
-        StateHasChanged();
+        await AddCurrentStaff(DbContext, Company);
 
-        NewWorker = CreateBlankWorker(Company!.Id);
-        ShowNewWorkerForm = false;
+        Company = await DbContext.Companies
+            .Include(c => c.Workers)
+            .FirstAsync() 
+            ?? throw new InvalidOperationException("Company must exist");
     }
 
-    private static async Task AddCurrentStaff(ApplicationDbContext DbContext, Company Company)
+    Workers = Company.Workers;
+
+    NewWorker = new()
     {
-        Worker Lucas = new()
-        {
-            CompanyId = Company.Id,
-            FirstName = "Lucas",
-            LastName = "Cordova",
-            Job = Job.AssistantProfessor
-        };
-
-        Worker Teo = new()
-        {
-            CompanyId = Company.Id,
-            FirstName = "Teo",
-            LastName = "Mendoza",
-            Job = Job.ResearchAssistant
-        };
-
-        Worker Ben = new()
-        {
-            CompanyId = Company.Id,
-            FirstName = "Ben",
-            LastName = "Webster",
-            Job = Job.ResearchAssistant
-        };
-
-        DbContext.Workers.AddRange(Lucas, Teo, Ben);
-        await DbContext.SaveChangesAsync();
-    }
-
-    protected void ToggleShowResearchAssistants()
-    {
-        ShowResearchAssistants = !ShowResearchAssistants;
-    }
-
-    private static Worker CreateBlankWorker(int CompanyId) => new()
-    {
-        CompanyId = CompanyId,
+        CompanyId = Company.Id,
         FirstName = "Temporary First Name",
         LastName = "Temporary Last Name",
         Job = Job.AssistantProfessor
     };
-
-    protected void NavigateHome() => NavigationManager.NavigateTo("/");
+}
 ```
 
-Add this code within our class, underneath all our existing code. Now there's quite alot here, but you'll see alot of similarities and repeated chunks to some degree. Our first function, AddWorkerToCompany, takes in a parameter Worker, confirms that it has the data we are requiring, which is a First and Last Name, and if it does, we add that worker to the database, save our changes, and reinitialize our Worker to a blank worker. We also reset the ShowNewWorkerForm boolean, this will make sense when we go to the front end. We then have our AddCurrentStaff function which we called in OnInitialized, it initiliazes three workers that we have predefined, and then adds them all at once to the database and saves changes. Note: The add range function is a special form of an add that can add multiple things in one operation. It is preferred when you have to add multiple things to the same table, because instead of forming a new request and inserting for each worker, it forms one request and adds them all at once. We then have a ToggleShowResearchAssistants function, we just toggles our boolean variable, this will be used on the front end to allow the user to filter all the workers to only the research assistants if they would like. If you go back to our ResearchAssistants variable, you will see the ShowResearchAssistants boolean with a question mark and a colon. This is called a ternary operation. Think of it like so: If ShowResearchAssistants (this is asking whether its true, !ShowResearchAssistants would ask if false), then ResearchAssistants equal our filtered group with the where command. Otherwise, ResearchAsisstants equal our normal workers list. This is a simplified but powerful if else statement. You may ask why this isn't used more, a ternary operation MUST return a value, it cannot be used to call a function or anything of the sort, it has to be giving back something to work with. Our next function is just our simple create blank worker function, that takes in a company Id and returns a boiler plate worker. You may notice, in our OnInitialized function, we do this manually, but at this point, we can replace the manual code with our function if we would like! No need to, just so you see that we can make our code more organized if we would like, something we typically would reccomend as you develop more. Lastly, we have our Navigate Home Function. You may be asking what the => signature means, this is a signature that allows for a function to be simplified only if it will have one line. In this case, all we want is to navigate back to the home page, so we can use our => signature. Now, our backend code is done!
+About this method:
+
+- `OnInitializedAsync` is a lifecycle method that Blazor calls when the component is initialized. Use it to load data that the page needs before rendering.  
+- It is `async` because it performs asynchronous work, such as database calls. Asynchronous operations prevent blocking the main thread, which keeps the UI responsive.  
+- It logs the incoming `QueryMessage` to show how URL bound parameters are received.  
+- It creates a scoped `DbContext` via `DbContextFactory`. Each context instance represents a snapshot of the database state for the duration of that scope.  
+- It tries to load the first `Company` and includes its `Workers`. The `Include` uses the relationship defined in Step 6, so `Company.Workers` is populated.  
+- If no company exists yet, it creates one, saves it, seeds initial staff with `AddCurrentStaff`, then reloads the company with workers and throws an exception if the company still cannot be found.  
+- It sets the `Workers` list for easier access and prepares a `NewWorker` placeholder for the UI binding in a later step.  
+
+Now add the remaining backend helpers beneath the previous method, still inside the same class:
+
+```csharp
+protected async Task AddWorkerToCompany(Worker Worker)
+{
+    if (string.IsNullOrWhiteSpace(Worker.FirstName) || string.IsNullOrWhiteSpace(Worker.LastName))
+    {
+        Logger.LogWarning("Rejected add: worker must have first and last name.");
+        return;
+    }
+
+    using var DbContext = DbContextFactory.CreateDbContext();
+
+    DbContext.Workers.Add(Worker);
+    await DbContext.SaveChangesAsync();
+
+    Workers.Add(Worker);
+    StateHasChanged();
+
+    NewWorker = CreateBlankWorker(Company!.Id);
+    ShowNewWorkerForm = false;
+}
+
+private static async Task AddCurrentStaff(ApplicationDbContext DbContext, Company Company)
+{
+    Worker Lucas = new()
+    {
+        CompanyId = Company.Id,
+        FirstName = "Lucas",
+        LastName = "Cordova",
+        Job = Job.AssistantProfessor
+    };
+
+    Worker Teo = new()
+    {
+        CompanyId = Company.Id,
+        FirstName = "Teo",
+        LastName = "Mendoza",
+        Job = Job.ResearchAssistant
+    };
+
+    Worker Ben = new()
+    {
+        CompanyId = Company.Id,
+        FirstName = "Ben",
+        LastName = "Webster",
+        Job = Job.ResearchAssistant
+    };
+
+    DbContext.Workers.AddRange(Lucas, Teo, Ben);
+    await DbContext.SaveChangesAsync();
+}
+
+protected void ToggleShowResearchAssistants()
+{
+    ShowResearchAssistants = !ShowResearchAssistants;
+}
+
+private static Worker CreateBlankWorker(int CompanyId) => new()
+{
+    CompanyId = CompanyId,
+    FirstName = "Temporary First Name",
+    LastName = "Temporary Last Name",
+    Job = Job.AssistantProfessor
+};
+
+protected void NavigateHome() => NavigationManager.NavigateTo("/");
+```
+
+What these helpers do:
+
+- `AddWorkerToCompany` validates input, adds the new `Worker` to the database, saves changes, updates the local `Workers` list, triggers a UI refresh with `StateHasChanged`, resets `NewWorker` using `CreateBlankWorker`, and hides the new worker form.  
+- `AddCurrentStaff` seeds a few initial `Worker` rows for the first `Company`. It uses `AddRange` to batch the insert in one operation.  
+- `ToggleShowResearchAssistants` flips the filter flag. The `ResearchAssistants` computed property uses a ternary expression to return either the filtered list or the full list.  
+- `CreateBlankWorker` returns a boilerplate `Worker` tied to a given `CompanyId`. This helps keep initialization consistent.  
+- `NavigateHome` uses `NavigationManager` to return to the home page. The `=>` syntax is an expression body, which is a concise form for single line methods.  
+
 
 Step 8 - Quick step, before we do our front end, lets just fill out our OnBoarding.css file. Css is just styling classes that we can use to make the thigns we show our users pretty. As a rule of the project, we have different levels of css attempting to have shared css at more general levels of the project so that we don't have to repeat css styles. However, it can be difficult to follow while in development, so it is something we are not 100% strict with, and try to do once the actual development is done. Add this to your .css file
 
